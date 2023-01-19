@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/ObjectTracking.unity
+    guid: 6f671c568ac7644599af4c65957bc41b
+  - enabled: 0
+    path: Assets/arfoundation-samples-4.2/Assets/Scenes/ImageTracking/ImageTrackingWithMultiplePrefabs/ImageTrackingWithMultiplePrefabs.unity
+    guid: a1bf0e7b9cece455f81c1d2731ba76e7
+  - enabled: 0
+    path: Assets/Scenes/Raycaster.unity
+    guid: 87e2cc3155cd94f33a8b3061520e621f
+  - enabled: 0
+    path: Assets/arfoundation-samples-4.2/Assets/Scenes/Object Tracking/ObjectTracking.unity
+    guid: 8f797cefb98fe43109524cbbcc8faafc
+  - enabled: 0
+    path: Assets/arfoundation-samples-4.2/Assets/Scenes/SimpleAR/SimpleAR.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 0
+    path: Assets/Scenes/MoveTowardsTarget.unity
+    guid: 9671671a962b844e78e90084682a4085
+  - enabled: 1
+    path: Assets/Scenes/Sol_TestScene.unity
+    guid: 833d827e2d42240c2a4577fcfd13f714
+  m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 744b813df90924c169af73489b8325de,
+      type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 89a6d18d3df8d3e4fa917b0f9a963bc0,
+      type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: de8a8e4f987434338a4b1062feb8d069,
+      type: 2}
+    com.unity.xr.arcore.PlayerSettings: {fileID: 11400000, guid: c2f7b8d7c0bff4d10874cbcf3f24af78,
+      type: 2}
+    com.unity.xr.arkit.PlayerSettings: {fileID: 11400000, guid: b27ec7d82a91a48e69fd689ad6808e5e,
+      type: 2}
+    com.unity.xr.magicleap.magic_leap_settings: {fileID: 11400000, guid: 1eb95d77acb39444e8cf44313496a874,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: e2f869774b12e400996eb546603602e3,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 6bb381a8ba31f114d9724357633b4625,
+      type: 2}
