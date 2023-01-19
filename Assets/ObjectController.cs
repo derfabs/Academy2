@@ -24,9 +24,7 @@ public class ObjectController : MonoBehaviour
 
     public GameObject m_Target;
 
-    //public MQTT_Sender MQTT_Sender;
-    public OSC_Sender osc_Sender;
-
+    // public MQTT_Sender MQTT_Sender;
     public AudioSource AudioSource;
 
     public StateManager stateManager;
@@ -79,17 +77,12 @@ public class ObjectController : MonoBehaviour
                 stateManager.updateObjectState(name, State.INVISIBLE);
             }
         }
-        /*
-        if (osc_Sender != null)
-        {
-            osc_Sender.Cat();
-        }
 
         if (AudioSource.clip != null)
         {
             AudioSource.Play();
         }
-        */
+
         // MQTT_Sender.SendMessage();
     }
 }
