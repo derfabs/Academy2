@@ -527,6 +527,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 86458fd2abefe4ad9a34ecbdc707db97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 986c42f9ee9682344888d9607b10712f, type: 2}
+    - target: {fileID: -7635826562936255635, guid: 86458fd2abefe4ad9a34ecbdc707db97,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 986c42f9ee9682344888d9607b10712f, type: 2}
     - target: {fileID: 919132149155446097, guid: 86458fd2abefe4ad9a34ecbdc707db97,
         type: 3}
       propertyPath: m_Name
@@ -565,16 +575,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Frog
   m_ImagePaired: Start
+  m_OnRayCastHide: 0
+  m_OnRayCastSendMQTT: 0
+  m_OnRayCastPlay: 0
+  m_OnRayCastMove: 0
+  m_OnTrackedImageShow: 0
+  m_OnTrackedImageHide: 0
+  m_OnTrackedImageSendMQTT: 0
+  m_OnTrackedImagePlay: 0
+  m_OnTrackedImageMove: 0
+  m_OnMQTTHide: 0
+  m_OnMQTTSendMQTT: 0
+  m_OnMQTTPlay: 0
+  m_OnMQTTMove: 0
+  stateManager: {fileID: 1754426056}
   m_DeactivateObjects:
   - Tree1
   - Tree2
+  MQTT_Sender: {fileID: 0}
+  AudioSource: {fileID: 0}
+  m_Target: {fileID: 0}
   m_Rigidbody: {fileID: 0}
   m_Speed: 5
   m_Threshold: 0.5
-  m_Target: {fileID: 0}
-  osc_Sender: {fileID: 0}
-  AudioSource: {fileID: 0}
-  stateManager: {fileID: 1754426056}
 --- !u!54 &264472318
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -629,7 +652,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 903072107}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &389429621
 MeshCollider:
@@ -1188,10 +1211,11 @@ Transform:
   m_GameObject: {fileID: 903072106}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 2, y: 0, z: 2}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 957407092}
+  - {fileID: 1006095107}
   - {fileID: 1051324485}
   - {fileID: 1086460740}
   - {fileID: 389429620}
@@ -1199,6 +1223,44 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &923767696 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: 86458fd2abefe4ad9a34ecbdc707db97,
+    type: 3}
+  m_PrefabInstance: {fileID: 264472314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &923767700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923767696}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21352da617b176a44a9804cf4ca86521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DissolveRenderers: []
+  Duration: 2.7
+  AutomaticallyRestoreDefaultMaterials: 0
+  meshesDetection: 0
+  InitialState: 1
+--- !u!114 &923767701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 923767696}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0250dc2ef476c74a87a5ba7b5b4033e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cycle: 0
+  dissolve: 0
+  materialize: 0
 --- !u!1001 &957407091
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1262,6 +1324,103 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 957407091}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1006095106
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1006095107}
+  - component: {fileID: 1006095110}
+  - component: {fileID: 1006095109}
+  - component: {fileID: 1006095108}
+  m_Layer: 0
+  m_Name: tree2target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1006095107
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006095106}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 3.67, y: 9.335384, z: 6.77}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 903072107}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1006095108
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006095106}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1006095109
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006095106}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1006095110
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006095106}
+  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1043429337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1408,9 +1567,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree_4
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 0395c09facd036b4bb2c54d13134ab74, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0395c09facd036b4bb2c54d13134ab74, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0395c09facd036b4bb2c54d13134ab74, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1473,15 +1636,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Tree2
-  m_ImagePaired: 
+  m_ImagePaired: Brille
+  m_OnRayCastHide: 0
+  m_OnRayCastSendMQTT: 0
+  m_OnRayCastPlay: 0
+  m_OnRayCastMove: 0
+  m_OnTrackedImageShow: 1
+  m_OnTrackedImageHide: 0
+  m_OnTrackedImageSendMQTT: 0
+  m_OnTrackedImagePlay: 0
+  m_OnTrackedImageMove: 0
+  m_OnMQTTHide: 0
+  m_OnMQTTSendMQTT: 0
+  m_OnMQTTPlay: 0
+  m_OnMQTTMove: 0
+  stateManager: {fileID: 1754426056}
   m_DeactivateObjects: []
-  m_Rigidbody: {fileID: 0}
+  MQTT_Sender: {fileID: 0}
+  AudioSource: {fileID: 0}
+  m_Target: {fileID: 0}
+  m_Rigidbody: {fileID: 1051324490}
   m_Speed: 5
   m_Threshold: 0.5
-  m_Target: {fileID: 0}
-  osc_Sender: {fileID: 0}
-  AudioSource: {fileID: 0}
-  stateManager: {fileID: 1754426056}
 --- !u!54 &1051324490
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1523,7 +1699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9c09916024aaf3e4abb26f9d059f6ca5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9c09916024aaf3e4abb26f9d059f6ca5, type: 3}
       propertyPath: m_LocalScale.x
@@ -1771,17 +1947,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _name: Tree1
-  m_ImagePaired: 
+  m_ImagePaired: Angel1
+  m_OnRayCastHide: 0
+  m_OnRayCastSendMQTT: 0
+  m_OnRayCastPlay: 0
+  m_OnRayCastMove: 1
+  m_OnTrackedImageShow: 1
+  m_OnTrackedImageHide: 1
+  m_OnTrackedImageSendMQTT: 0
+  m_OnTrackedImagePlay: 0
+  m_OnTrackedImageMove: 1
+  m_OnMQTTHide: 0
+  m_OnMQTTSendMQTT: 0
+  m_OnMQTTPlay: 0
+  m_OnMQTTMove: 0
+  stateManager: {fileID: 1754426056}
   m_DeactivateObjects:
   - Frog
   - Tree2
-  m_Rigidbody: {fileID: 0}
-  m_Speed: 5
-  m_Threshold: 0.5
-  m_Target: {fileID: 0}
-  osc_Sender: {fileID: 0}
+  MQTT_Sender: {fileID: 0}
   AudioSource: {fileID: 0}
-  stateManager: {fileID: 1754426056}
+  m_Target: {fileID: 1006095106}
+  m_Rigidbody: {fileID: 1238495896}
+  m_Speed: 0.2
+  m_Threshold: 0.1
 --- !u!54 &1238495896
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1798,18 +1987,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1238495900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1238495891}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08a511dd90dc743faa81877b9f705fe5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1392912140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2158,14 +2335,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Tree3
   m_ImagePaired: 
+  m_OnRayCastHide: 0
+  m_OnRayCastSendMQTT: 0
+  m_OnRayCastPlay: 0
+  m_OnRayCastMove: 0
+  m_OnTrackedImageShow: 0
+  m_OnTrackedImageHide: 0
+  m_OnTrackedImageSendMQTT: 0
+  m_OnTrackedImagePlay: 0
+  m_OnTrackedImageMove: 0
+  m_OnMQTTHide: 0
+  m_OnMQTTSendMQTT: 0
+  m_OnMQTTPlay: 0
+  m_OnMQTTMove: 0
+  stateManager: {fileID: 1754426056}
   m_DeactivateObjects: []
+  MQTT_Sender: {fileID: 0}
+  AudioSource: {fileID: 0}
+  m_Target: {fileID: 1619156275}
   m_Rigidbody: {fileID: 0}
   m_Speed: 5
   m_Threshold: 0.5
-  m_Target: {fileID: 1619156275}
-  osc_Sender: {fileID: 0}
-  AudioSource: {fileID: 0}
-  stateManager: {fileID: 1754426056}
 --- !u!54 &1619156280
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2648,7 +2838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 39ee38c0568e560438bac8acb84161b2, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 39ee38c0568e560438bac8acb84161b2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2712,14 +2902,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _name: Stone
   m_ImagePaired: 
+  m_OnRayCastHide: 0
+  m_OnRayCastSendMQTT: 0
+  m_OnRayCastPlay: 0
+  m_OnRayCastMove: 0
+  m_OnTrackedImageShow: 0
+  m_OnTrackedImageHide: 0
+  m_OnTrackedImageSendMQTT: 0
+  m_OnTrackedImagePlay: 0
+  m_OnTrackedImageMove: 0
+  m_OnMQTTHide: 0
+  m_OnMQTTSendMQTT: 0
+  m_OnMQTTPlay: 0
+  m_OnMQTTMove: 0
+  stateManager: {fileID: 1754426056}
   m_DeactivateObjects: []
+  MQTT_Sender: {fileID: 0}
+  AudioSource: {fileID: 0}
+  m_Target: {fileID: 0}
   m_Rigidbody: {fileID: 0}
   m_Speed: 5
   m_Threshold: 0.5
-  m_Target: {fileID: 0}
-  osc_Sender: {fileID: 0}
-  AudioSource: {fileID: 0}
-  stateManager: {fileID: 1754426056}
 --- !u!54 &1896910477
 Rigidbody:
   m_ObjectHideFlags: 0

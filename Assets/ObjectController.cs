@@ -11,8 +11,51 @@ public class ObjectController : MonoBehaviour
     [SerializeField]
     public string m_ImagePaired = "";
 
+    //INPUT-ACTION:  RAYCAST
+    public bool m_OnRayCastHide = false;
+
+    public bool m_OnRayCastSendMQTT = false;
+
+    public bool m_OnRayCastPlay = false;
+
+    public bool m_OnRayCastMove = false;
+
+    //INPUT-ACTION:  TRACKING
+    public bool m_OnTrackedImageShow = false;
+
+    public bool m_OnTrackedImageHide = false;
+
+    public bool m_OnTrackedImageSendMQTT = false;
+
+    public bool m_OnTrackedImagePlay = false;
+
+    public bool m_OnTrackedImageMove = false;
+
+    //INTPUT-ACTION: MQTT SIGNAL
+    public bool m_OnMQTTHide = false;
+
+    public bool m_OnMQTTSendMQTT = false;
+
+    public bool m_OnMQTTPlay = false;
+
+    public bool m_OnMQTTMove = false;
+
+    //******
+    // OUTPUT-ACTION
+    // 1. HIDE/SHOW
+    public StateManager stateManager;
+
     [SerializeField]
     public string[] m_DeactivateObjects;
+
+    // 2. SEND SIGNAL
+    public MQTT_Sender MQTT_Sender;
+
+    // 3. PLAY
+    public AudioSource AudioSource;
+
+    // 4. MOVE
+    public GameObject m_Target;
 
     private bool isMoving = false;
 
@@ -22,13 +65,8 @@ public class ObjectController : MonoBehaviour
 
     public float m_Threshold = 0.5f;
 
-    public GameObject m_Target;
-
-    // public MQTT_Sender MQTT_Sender;
-    public AudioSource AudioSource;
-
-    public StateManager stateManager;
-
+    //5. MATERIAL DISSAPEAR
+    //******
     void Start()
     {
         m_Rigidbody = this.GetComponent<Rigidbody>();
@@ -56,20 +94,25 @@ public class ObjectController : MonoBehaviour
 
     public void Move()
     {
-        m_Rigidbody.useGravity = true;
+        if (m_Target == null)
+        {
+            return;
+        }
+
+        // m_Rigidbody.useGravity = true;
         isMoving = true;
     }
 
     public void OnRaycastHit()
     {
-        Debug.Log("touch me: " + _name);
+        Debug.Log("Calling OnRaycastHit: " + _name);
 
-        if (m_Target != null)
+        if (m_OnRayCastMove)
         {
             Move();
         }
 
-        if (stateManager != null)
+        if (m_OnRayCastHide)
         {
             stateManager.updateObjectState(_name, State.INVISIBLE);
             foreach (string name in m_DeactivateObjects)
@@ -78,11 +121,75 @@ public class ObjectController : MonoBehaviour
             }
         }
 
-        if (AudioSource.clip != null)
+        if (m_OnRayCastPlay && AudioSource.clip != null)
         {
             AudioSource.Play();
         }
 
-        // MQTT_Sender.SendMessage();
+        if (m_OnRayCastSendMQTT)
+        {
+            MQTT_Sender.SendMessage();
+        }
+    }
+
+    public void onImageTracked()
+    {
+        Debug.Log("Calling on ImageTracked: " + _name);
+        if (m_OnTrackedImageMove)
+        {
+            Debug.Log("Moving");
+            Move();
+        }
+
+        if (m_OnTrackedImageShow)
+        {
+            stateManager.updateObjectState(_name, State.VISIBLE);
+        }
+
+        if (m_OnTrackedImageHide)
+        {
+            foreach (string name in m_DeactivateObjects)
+            {
+                stateManager.updateObjectState(name, State.INVISIBLE);
+            }
+        }
+
+        if (m_OnTrackedImagePlay && AudioSource.clip != null)
+        {
+            AudioSource.Play();
+        }
+
+        if (m_OnTrackedImageSendMQTT)
+        {
+            MQTT_Sender.SendMessage();
+        }
+    }
+
+    public void OnMQTTReceived()
+    {
+        Debug.Log("Calling on OnMQTTReceived: " + _name);
+        if (m_OnMQTTMove)
+        {
+            Move();
+        }
+
+        if (m_OnMQTTHide)
+        {
+            stateManager.updateObjectState(_name, State.INVISIBLE);
+            foreach (string name in m_DeactivateObjects)
+            {
+                stateManager.updateObjectState(name, State.INVISIBLE);
+            }
+        }
+
+        if (m_OnMQTTPlay && AudioSource.clip != null)
+        {
+            AudioSource.Play();
+        }
+
+        if (m_OnMQTTSendMQTT)
+        {
+            MQTT_Sender.SendMessage();
+        }
     }
 }

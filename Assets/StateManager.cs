@@ -152,22 +152,23 @@ public class StateManager : MonoBehaviour
 
     public void onImageTracked(ARTrackedImage trackedImage)
     {
+        Debug.Log("Looking for element: onImageTracked");
         string imageName = trackedImage.referenceImage.name;
+
         Vector3 imagePosition = trackedImage.transform.position;
+        Debug.Log("image position: " + imagePosition.ToString());
         GameObject selected = m_ImagesPairesDic[imageName];
+        Debug.Log("old position: " + selected.transform.position.ToString());
 
         // 1. Update position according trackedIamge (should check orientation)
         selected.transform.position = imagePosition;
-
-        // 2. Set self to active
+        Debug.Log("new position: " + selected.transform.position.ToString());
         ObjectController selectedOC = selected.GetComponent<ObjectController>();
-        updateObjectState(selectedOC.getName(), State.VISIBLE);
+        string gameName = selectedOC.getName();
+        Debug.Log($"IMAGE TRACKED:${imageName} with prefab ${gameName}");
 
-        // 3. Set others to deactive
-        foreach (string name in selectedOC.m_DeactivateObjects)
-        {
-            updateObjectState(name, State.INVISIBLE);
-        }
+        // 2. OnImageTracked
+        selectedOC.onImageTracked();
     }
 
     // *************************************
