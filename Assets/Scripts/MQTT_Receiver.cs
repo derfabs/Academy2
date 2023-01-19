@@ -21,26 +21,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using M2MqttUnity;
 using UnityEngine;
 using UnityEngine.UI;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
-using M2MqttUnity;
 
 public class MQTT_Receiver : M2MqttUnityClient
 {
+    public StateManager stateManager;
+
     [Header("MQTT topics")]
-    [Tooltip("Set the topic to subscribe. !!!ATTENTION!!! multi-level wildcard # subscribes to all topics")]
+    [
+        Tooltip(
+            "Set the topic to subscribe. !!!ATTENTION!!! multi-level wildcard # subscribes to all topics")
+    ]
     public string topicSubscribe = "#"; // topic to subscribe. !!! The multi-level wildcard # is used to subscribe to all the topics. Attention i if #, subscribe to all topics. Attention if MQTT is on data plan
+
     [Tooltip("Set the topic to publish (optional)")]
     public string topicPublish = ""; // topic to publish
+
     public string messagePublish = ""; // message to publish
 
-    [Tooltip("Set this to true to perform a testing cycle automatically on startup")]
+    [
+        Tooltip(
+            "Set this to true to perform a testing cycle automatically on startup")
+    ]
     public bool autoTest = false;
 
     //using C# Property GET/SET and event listener to reduce Update overhead in the controlled objects
@@ -58,12 +67,13 @@ public class MQTT_Receiver : M2MqttUnityClient
             m_msg = value;
             if (OnMessageArrived != null)
             {
-                OnMessageArrived(m_msg);
+                OnMessageArrived (m_msg);
             }
         }
     }
 
     public event OnMessageArrivedDelegate OnMessageArrived;
+
     public delegate void OnMessageArrivedDelegate(string newMsg);
 
     //using C# Property GET/SET and event listener to expose the connection status
@@ -81,20 +91,28 @@ public class MQTT_Receiver : M2MqttUnityClient
             m_isConnected = value;
             if (OnConnectionSucceeded != null)
             {
-                OnConnectionSucceeded(isConnected);
+                OnConnectionSucceeded (isConnected);
             }
         }
     }
+
     public event OnConnectionSucceededDelegate OnConnectionSucceeded;
+
     public delegate void OnConnectionSucceededDelegate(bool isConnected);
 
     // a list to store the messages
     private List<string> eventMessages = new List<string>();
+
     public void Publish()
     {
-        client.Publish(topicPublish, System.Text.Encoding.UTF8.GetBytes(messagePublish), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+        client
+            .Publish(topicPublish,
+            System.Text.Encoding.UTF8.GetBytes(messagePublish),
+            MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
+            false);
         Debug.Log("Test message published");
     }
+
     public void SetEncrypted(bool isEncrypted)
     {
         this.isEncrypted = isEncrypted;
@@ -134,7 +152,9 @@ public class MQTT_Receiver : M2MqttUnityClient
 
     protected override void SubscribeTopics()
     {
-        client.Subscribe(new string[] { topicSubscribe }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+        client
+            .Subscribe(new string[] { topicSubscribe },
+            new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
     }
 
     protected override void UnsubscribeTopics()
@@ -155,7 +175,7 @@ public class MQTT_Receiver : M2MqttUnityClient
         Debug.Log("Received: " + msg);
         Debug.Log("from topic: " + m_msg);
 
-        StoreMessage(msg);
+        StoreMessage (msg);
         if (topic == topicSubscribe)
         {
             if (autoTest)
@@ -172,13 +192,14 @@ public class MQTT_Receiver : M2MqttUnityClient
         {
             eventMessages.Clear();
         }
-        eventMessages.Add(eventMsg);
+        eventMessages.Add (eventMsg);
+
+        stateManager.OnMQTTReceived (eventMsg);
     }
 
     protected override void Update()
     {
         base.Update(); // call ProcessMqttEvents()
-
     }
 
     private void OnDestroy()
@@ -194,4 +215,3 @@ public class MQTT_Receiver : M2MqttUnityClient
         }
     }
 }
-

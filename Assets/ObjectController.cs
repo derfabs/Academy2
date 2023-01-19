@@ -11,6 +11,9 @@ public class ObjectController : MonoBehaviour
     [SerializeField]
     public string m_ImagePaired = "";
 
+    [SerializeField]
+    public string m_MQTT_In = "";
+
     //INPUT-ACTION:  RAYCAST
     public bool m_OnRayCastHide = false;
 
@@ -19,6 +22,8 @@ public class ObjectController : MonoBehaviour
     public bool m_OnRayCastPlay = false;
 
     public bool m_OnRayCastMove = false;
+
+    public bool m_OnRayCastMaterial = false;
 
     //INPUT-ACTION:  TRACKING
     public bool m_OnTrackedImageShow = false;
@@ -31,6 +36,8 @@ public class ObjectController : MonoBehaviour
 
     public bool m_OnTrackedImageMove = false;
 
+    public bool m_OnTrackedImageMaterial = false;
+
     //INTPUT-ACTION: MQTT SIGNAL
     public bool m_OnMQTTHide = false;
 
@@ -39,6 +46,8 @@ public class ObjectController : MonoBehaviour
     public bool m_OnMQTTPlay = false;
 
     public bool m_OnMQTTMove = false;
+
+    public bool m_OnMQTTMaterial = false;
 
     //******
     // OUTPUT-ACTION
@@ -66,10 +75,20 @@ public class ObjectController : MonoBehaviour
     public float m_Threshold = 0.5f;
 
     //5. MATERIAL DISSAPEAR
+    public DissolveHelper m_DissolveHelper;
+
+    public Material m_NewMaterial;
+
+    //6. Send MQTT
+    public MQTT_Receiver m_MQTT_Receiver;
+
+    public string m_MQTT_Out = "";
+
     //******
     void Start()
     {
-        m_Rigidbody = this.GetComponent<Rigidbody>();
+        m_DissolveHelper = GetComponent<DissolveHelper>();
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
@@ -130,6 +149,20 @@ public class ObjectController : MonoBehaviour
         {
             MQTT_Sender.SendMessage();
         }
+
+        if (m_OnRayCastMaterial)
+        {
+            Renderer renderer = this.gameObject.GetComponent<Renderer>();
+            renderer.material = m_NewMaterial;
+            m_DissolveHelper.onAction();
+        }
+
+        if (m_OnRayCastSendMQTT)
+        {
+            m_MQTT_Receiver.topicPublish = "topic";
+            m_MQTT_Receiver.messagePublish = m_MQTT_Out;
+            m_MQTT_Receiver.Publish();
+        }
     }
 
     public void onImageTracked()
@@ -163,6 +196,19 @@ public class ObjectController : MonoBehaviour
         {
             MQTT_Sender.SendMessage();
         }
+
+        if (m_OnTrackedImageMaterial)
+        {
+            Renderer renderer = this.gameObject.GetComponent<Renderer>();
+            renderer.material = m_NewMaterial;
+            m_DissolveHelper.onAction();
+        }
+        if (m_OnTrackedImageSendMQTT)
+        {
+            m_MQTT_Receiver.topicPublish = "topic";
+            m_MQTT_Receiver.messagePublish = m_MQTT_Out;
+            m_MQTT_Receiver.Publish();
+        }
     }
 
     public void OnMQTTReceived()
@@ -191,5 +237,51 @@ public class ObjectController : MonoBehaviour
         {
             MQTT_Sender.SendMessage();
         }
+
+        if (m_OnMQTTMaterial)
+        {
+            Renderer renderer = this.gameObject.GetComponent<Renderer>();
+            renderer.material = m_NewMaterial;
+            m_DissolveHelper.onAction();
+        }
+        if (m_OnMQTTSendMQTT)
+        {
+            m_MQTT_Receiver.topicPublish = "topic";
+            m_MQTT_Receiver.messagePublish = m_MQTT_Out;
+            m_MQTT_Receiver.Publish();
+        }
     }
 }
+
+/*GameObject parentGameObject = this.gameObject;  
+       
+        materials = GetComponent<Renderer>().materials;
+        var index = 0;
+
+        Material[] newmaterials = new Material[materials.Length + 1];
+        foreach (var item in materials)
+        {
+            newmaterials[index] = item;
+            index++;
+        }
+        newmaterials[index] =
+            (new Material(Shader.Find("AxisDissolveMetallic")));
+        materials = newmaterials;
+
+        foreach (var item in materials)
+        {
+            Debug.Log("Current materials: " + item.name);
+        }
+
+        m_DissolveHelper = parentGameObject.AddComponent<DissolveHelper>();
+        */
+
+/* 
+            Material[] materials = renderer.materials;
+            Material newMaterial = materials[materials.Length - 1];
+
+            foreach (var item in materials)
+            {
+                Debug.Log("Current materials: " + item.name);
+            }
+        */

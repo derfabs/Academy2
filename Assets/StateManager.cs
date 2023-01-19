@@ -171,5 +171,23 @@ public class StateManager : MonoBehaviour
         selectedOC.onImageTracked();
     }
 
+    public void OnMQTTReceived(string msg)
+    {
+        Debug.Log("Receiving msg..");
+        foreach (RecordObject item in m_SceneState)
+        {
+            if (
+                item.name.Contains(msg) // TODO: Updtae to any message
+            )
+            {
+                Debug.Log("About to do something...");
+                item
+                    .reference
+                    .GetComponent<ObjectController>()
+                    .OnMQTTReceived();
+            }
+        }
+    }
+
     // *************************************
 }

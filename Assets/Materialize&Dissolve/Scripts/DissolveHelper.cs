@@ -6,36 +6,39 @@ using UnityEngine.UI;
 public class DissolveHelper : MonoBehaviour
 {
     private Dissolver dissolver;
-    private bool wait = true;
 
-    public bool cycle;
-    public bool dissolve;
-    public bool materialize;
+    public bool cycle = true;
 
+    public bool dissolve = false;
+
+    public bool materialize = false;
 
     void Start()
     {
-        dissolver = GetComponent<Dissolver>();
+        GameObject parentGameObject = this.gameObject;
+        Debug.Log("GAME OBJECT NAME:" + parentGameObject.name);
+        dissolver = parentGameObject.GetComponent<Dissolver>();
     }
 
-    void Update()
+    public void onAction()
     {
-       
-
-        if (dissolver && wait)
+        if (dissolver)
         {
-            if (cycle) {
+            if (cycle)
+            {
                 if (dissolver.MaterializeDissolve())
                 {
-                    //wait = false;
                     StartCoroutine(Coroutine());
                 }
             }
             else if (dissolve)
-            { dissolver.Dissolve(); }
+            {
+                dissolver.Dissolve();
+            }
             else if (materialize)
-            { dissolver.Materialize(); }
-
+            {
+                dissolver.Materialize();
+            }
         }
     }
 
@@ -43,6 +46,5 @@ public class DissolveHelper : MonoBehaviour
     {
         yield return new WaitForSeconds(1.6f);
         dissolver.ReplaceMaterials();
-        //wait = true;
     }
 }
