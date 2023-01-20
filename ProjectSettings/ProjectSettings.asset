@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: fabian.raith@gmx.de
-  productName: Akademie_Apple
+  productName: Akademie
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -336,10 +336,9 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: -6122771651556369562, guid: e2f869774b12e400996eb546603602e3, type: 2}
-  - {fileID: 11400000, guid: 1eb95d77acb39444e8cf44313496a874, type: 2}
-  - {fileID: 1845153816635333712, guid: 6bb381a8ba31f114d9724357633b4625, type: 2}
-  - {fileID: 4800000, guid: c9f956787b1d945e7b36e0516201fc76, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -359,7 +358,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.fabian.raithgmx.de.Akademie_Apple
+    Android: com.fabian.raithgmx.de.Akademie
     Standalone: com.Fabian-Raith.Akademie-Apple
     iPhone: com.fabian.raith-gmx.de.Akademie-Apple
   buildNumber:

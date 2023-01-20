@@ -174,6 +174,8 @@ public class MQTT_Receiver : M2MqttUnityClient
 
         Debug.Log("Received: " + msg);
         Debug.Log("from topic: " + m_msg);
+        stateManager.OnMQTTReceived (msg);
+
 
         StoreMessage (msg);
         if (topic == topicSubscribe)
@@ -188,13 +190,13 @@ public class MQTT_Receiver : M2MqttUnityClient
 
     private void StoreMessage(string eventMsg)
     {
-        if (eventMessages.Count > 50)
+        Debug.Log("CALLING MEEE");
+        if (eventMessages.Count > 1)
         {
             eventMessages.Clear();
         }
         eventMessages.Add (eventMsg);
 
-        stateManager.OnMQTTReceived (eventMsg);
     }
 
     protected override void Update()
@@ -203,7 +205,7 @@ public class MQTT_Receiver : M2MqttUnityClient
     }
 
     private void OnDestroy()
-    {
+    {   eventMessages.Clear();
         Disconnect();
     }
 
