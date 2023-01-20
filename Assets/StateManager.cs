@@ -45,6 +45,7 @@ public class StateManager : MonoBehaviour
         ar_SessionOrigin = GetComponent<ARSessionOrigin>();
         loadSceneState();
         loadImagesPaired();
+
         restartButton.onClick.AddListener (restartState);
     }
 
@@ -70,11 +71,11 @@ public class StateManager : MonoBehaviour
         foreach (GameObject item in sceneObjects)
         {
             RecordObject initState = new RecordObject();
-            string name =
-                item.transform.GetComponent<ObjectController>().getName();
-            initState.name = name;
+
+            initState.name = item.name;
             initState.reference = item;
             initState.state = getCurrentState(item);
+
             m_SceneState.Add (initState);
         }
     }
@@ -83,13 +84,22 @@ public class StateManager : MonoBehaviour
     {
         foreach (GameObject item in sceneObjects)
         {
-            string imageName =
-                item.transform.GetComponent<ObjectController>().m_ImagePaired;
+            ImageTrackedAction _controller =
+                item.transform.GetComponent<ImageTrackedAction>();
+            if (_controller == null) return;
+            string imageName = _controller.m_ImagePaired;
 
             if (imageName.Length > 0)
             {
-                Debug.Log("Imaged Paired:" + imageName);
-                m_ImagesPairesDic.Add (imageName, item);
+                if (m_ImagesPairesDic.ContainsKey(imageName))
+                {
+                    Debug.Log($"${imageName} already paired");
+                }
+                else
+                {
+                    Debug.Log("Image Paired:" + imageName);
+                    m_ImagesPairesDic.Add (imageName, item);
+                }
             }
         }
     }
@@ -122,6 +132,10 @@ public class StateManager : MonoBehaviour
         RecordObject selectedObject;
         foreach (RecordObject item in m_SceneState)
         {
+            Debug
+                .Log("Item name: " +
+                (item.name == item.reference.name).ToString());
+
             if (item.name == name)
             {
                 selectedObject = item;
@@ -141,7 +155,7 @@ public class StateManager : MonoBehaviour
 
     public void restartState()
     {
-        Debug.Log("Calling restart");
+        Debug.Log("Restart callback... ");
         foreach (RecordObject item in m_SceneState)
         {
             RecordObject selected = item;
@@ -156,35 +170,37 @@ public class StateManager : MonoBehaviour
         string imageName = trackedImage.referenceImage.name;
 
         Vector3 imagePosition = trackedImage.transform.position;
-        Debug.Log("image position: " + imagePosition.ToString());
+        Debug.Log("Image position: " + imagePosition.ToString());
         GameObject selected = m_ImagesPairesDic[imageName];
-        Debug.Log("old position: " + selected.transform.position.ToString());
+        Debug.Log("Old position: " + selected.transform.position.ToString());
 
         // 1. Update position according trackedIamge (should check orientation)
         selected.transform.position = imagePosition;
-        Debug.Log("new position: " + selected.transform.position.ToString());
-        ObjectController selectedOC = selected.GetComponent<ObjectController>();
-        string gameName = selectedOC.getName();
+        Debug.Log("New position: " + selected.transform.position.ToString());
+        ImageTrackedAction _selected =
+            selected.GetComponent<ImageTrackedAction>();
+        string gameName = _selected.getName();
         Debug.Log($"IMAGE TRACKED:${imageName} with prefab ${gameName}");
 
         // 2. OnImageTracked
-        selectedOC.onImageTracked();
+        _selected.OnImageTracked();
     }
 
     public void OnMQTTReceived(string msg)
     {
         Debug.Log("Receiving msg..");
+
         foreach (RecordObject item in m_SceneState)
         {
-            if (
-                item.name.Contains(msg) // TODO: Updtae to any message
-            )
+            MQTTAction _action = item.reference.GetComponent<MQTTAction>();
+            string _identifier = _action.m_MessageIdentifier;
+            bool _contains = msg.Contains(_action.m_MessageIdentifier);
+
+            Debug.Log($"{msg} contains {_identifier}: {_contains}");
+
+            if (_contains)
             {
-                Debug.Log("About to do something...");
-                item
-                    .reference
-                    .GetComponent<ObjectController>()
-                    .OnMQTTReceived();
+                _action.OnReceived();
             }
         }
     }

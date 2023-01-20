@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-public class SpawnSceneFromImage : MonoBehaviour
+public class UpdateSceneFromImage : MonoBehaviour
 {
     /*
         Pre-condition: 

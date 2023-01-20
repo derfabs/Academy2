@@ -58,15 +58,15 @@ public class Raycaster : MonoBehaviour
         if (
             (
             hitGameObject != previousHitGameObject &&
-            hitGameObject.GetComponent<ObjectController>() != null
+            hitGameObject.GetComponent<RaycastAction>() != null
             ) ||
             (
             previousHitGameObject == null &&
-            hitGameObject.GetComponent<ObjectController>() != null
+            hitGameObject.GetComponent<RaycastAction>() != null
             )
         )
         {
-            hitGameObject.GetComponent<ObjectController>().OnRaycastHit();
+            hitGameObject.GetComponent<RaycastAction>().OnRaycastHit();
 
             //    Debug
             //        .Log("Raycast Action called, Object hit: " +
@@ -96,15 +96,15 @@ public class Raycaster : MonoBehaviour
         if (
             (
             hitGameObject != previousHitGameObject &&
-            hitGameObject.GetComponent<ObjectController>() != null
+            hitGameObject.GetComponent<RaycastAction>() != null
             ) ||
             (
             previousHitGameObject == null &&
-            hitGameObject.GetComponent<ObjectController>() != null
+            hitGameObject.GetComponent<RaycastAction>() != null
             )
         )
         {
-            hitGameObject.GetComponent<ObjectController>().OnRaycastHit();
+            hitGameObject.GetComponent<RaycastAction>().OnRaycastHit();
 
             // textDebug.text =
             //     "Raycast Action called, Object hit: " +
