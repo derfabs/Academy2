@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -7,20 +5,14 @@ using UnityEngine.XR.ARSubsystems;
 public class UpdateSceneFromImage : MonoBehaviour
 {
     /*
-        Pre-condition: 
-            - Have a tracking image names "Start";
-            - Have initialized a StateManager.
-
-        After detecting the starting image send its position to StateManager to translates objects of scene.
+        Listen to events of AR TrackedImageManager, and sends detected images to StateManager.
     
     */
     private ARTrackedImageManager m_TrackedImageManager;
 
-    public StateManager m_StateManager;
+    private StateManager m_StateManager;
 
     private ARTrackedImage m_LastImageSeelected;
-
-    private bool ready = false;
 
     void OnEnable() => m_TrackedImageManager.trackedImagesChanged += OnChanged;
 
@@ -30,15 +22,7 @@ public class UpdateSceneFromImage : MonoBehaviour
     {
         foreach (var newImage in eventArgs.updated)
         {
-            if (newImage.referenceImage.name == "Start")
-            {
-                TrackingState state = newImage.trackingState;
-                onStartCallback (newImage);
-            }
-            else
-            {
-                onUpdateState (newImage);
-            }
+            onUpdateState (newImage);
         }
     }
 
@@ -50,23 +34,6 @@ public class UpdateSceneFromImage : MonoBehaviour
         Debug
             .Log("State Manager successfully loaded: " +
             m_StateManager.ToString());
-    }
-
-    private void onStartCallback(ARTrackedImage m_SelectedImage)
-    {
-        if (ready) return;
-
-        TrackingState state = m_SelectedImage.trackingState;
-        Debug
-            .Log($"Image Update: {m_SelectedImage.transform.position}" +
-            $"{m_SelectedImage.transform.eulerAngles}");
-
-        if (state == TrackingState.Tracking)
-        {
-            m_StateManager.updateWorldPosition(m_SelectedImage.transform);
-
-            ready = true;
-        }
     }
 
     private void onUpdateState(ARTrackedImage m_SelectedImage)

@@ -68,7 +68,7 @@ public struct MaterialDisappear
 
 public class ActionController : MonoBehaviour
 {
-    public StateManager m_StateManager;
+    private StateManager m_StateManager;
 
     [SerializeField]
     public Move m_ActionMove;
@@ -93,6 +93,8 @@ public class ActionController : MonoBehaviour
             GetComponent<DissolveHelper>();
 
         m_ActionMove.m_Rigidbody = GetComponent<Rigidbody>();
+
+        m_StateManager = FindObjectOfType<StateManager>();
     }
 
     public string getName()

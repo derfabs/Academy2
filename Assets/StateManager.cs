@@ -30,9 +30,6 @@ public class StateManager : MonoBehaviour
     [SerializeField]
     private GameObject[] sceneObjects;
 
-    [SerializeField]
-    private Button restartButton;
-
     public Dictionary<string, GameObject>
         m_ImagesPairesDic = new Dictionary<string, GameObject>();
 
@@ -45,8 +42,6 @@ public class StateManager : MonoBehaviour
         ar_SessionOrigin = GetComponent<ARSessionOrigin>();
         loadSceneState();
         loadImagesPaired();
-
-        restartButton.onClick.AddListener (restartState);
     }
 
     // *************************************
@@ -106,26 +101,6 @@ public class StateManager : MonoBehaviour
 
     // *************************************
     // Actions of Manager
-    public void updateWorldPosition(Transform transform)
-    {
-        Vector3 origin = transform.position;
-        Quaternion orientation = transform.rotation;
-        Vector3 eulerAngles = transform.eulerAngles;
-
-        Debug.Log($"State Manager: {origin} - " + $"{transform.eulerAngles}");
-
-        foreach (GameObject item in sceneObjects)
-        {
-            Vector3 currentPosition = item.transform.position;
-            Quaternion currentOrientation = item.transform.rotation;
-
-            Vector3 newPosition = currentPosition + origin;
-
-            ar_SessionOrigin
-                .MakeContentAppearAt(item.transform, newPosition, orientation);
-        }
-    }
-
     public void updateObjectState(string name, State newstate)
     {
         Debug.Log("Setting: " + name + " to " + newstate);
@@ -153,19 +128,23 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    public void restartState()
+    public void updateAll(State newstate, bool active)
     {
         Debug.Log("Restart callback... ");
         foreach (RecordObject item in m_SceneState)
         {
             RecordObject selected = item;
-            selected.state = State.VISIBLE;
-            selected.reference.SetActive(true);
+            selected.state = newstate;
+            selected.reference.SetActive (active);
         }
     }
 
     public void onImageTracked(ARTrackedImage trackedImage)
     {
+        /*
+            Looks for object paired with tracked image and update its position with World Space position.
+
+        */
         Debug.Log("Looking for element: onImageTracked");
         string imageName = trackedImage.referenceImage.name;
 
@@ -174,7 +153,7 @@ public class StateManager : MonoBehaviour
         GameObject selected = m_ImagesPairesDic[imageName];
         Debug.Log("Old position: " + selected.transform.position.ToString());
 
-        // 1. Update position according trackedIamge (should check orientation)
+        // 1. Update position according trackedIamge (TODO: should check orientation)
         selected.transform.position = imagePosition;
         Debug.Log("New position: " + selected.transform.position.ToString());
         ImageTrackedAction _selected =

@@ -16,7 +16,6 @@ public class DissolveHelper : MonoBehaviour
     void Start()
     {
         GameObject parentGameObject = this.gameObject;
-        Debug.Log("GAME OBJECT NAME:" + parentGameObject.name);
         dissolver = parentGameObject.GetComponent<Dissolver>();
     }
 
