@@ -19,6 +19,8 @@ public struct Move
     public float m_Threshold;
 
     public bool m_UseGravity;
+
+    public float timeOffset;
 }
 
 [System.Serializable]
@@ -30,6 +32,8 @@ public struct Display
 
     [SerializeField]
     public string[] m_DeactivateObjects;
+
+    public float timeOffset;
 }
 
 [System.Serializable]
@@ -38,6 +42,8 @@ public struct AudioPlay
     public bool m_Play;
 
     public AudioSource m_AudioSource;
+
+    public float timeOffset;
 }
 
 [System.Serializable]
@@ -50,6 +56,8 @@ public struct SendMQTT
     public string m_Topic;
 
     public string m_Message;
+
+    public float timeOffset;
 }
 
 [System.Serializable]
@@ -60,6 +68,8 @@ public struct MaterialDisappear
     public DissolveHelper m_DissolveHelper;
 
     public Material m_NewMaterial;
+
+    public float timeOffset;
 }
 
 public class ActionController : MonoBehaviour
@@ -82,6 +92,26 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     public MaterialDisappear m_ActionMaterialDisappear;
+
+    public bool MOVE_START = false;
+
+    private bool MOVE_READY = false;
+
+    private bool DISPLAY_START = false;
+
+    private bool DISPLAY_READY = false;
+
+    private bool AUDIO_START = false;
+
+    private bool AUDIO_READY = false;
+
+    private bool MQTT_START = false;
+
+    private bool MQTT_READY = false;
+
+    private bool MATERIAL_START = false;
+
+    private bool MATERIAL_READY = false;
 
     void Start()
     {
@@ -115,19 +145,19 @@ public class ActionController : MonoBehaviour
             m_dir * Time.deltaTime * m_ActionMove.m_Speed);
     }
 
-    public void OnCallback()
+    void startMove()
     {
-        //------------------------------------------------------
-        //1. ACTION MOVE
         if (m_ActionMove.m_MoveTowards)
         {
             if (m_ActionMove.m_Target == null) return;
             m_ActionMove.m_Rigidbody.useGravity = m_ActionMove.m_UseGravity;
             isMoving = true;
         }
+        MOVE_START = true;
+    }
 
-        //------------------------------------------------------
-        //2. ACTION DISPLAY
+    void startDisplay()
+    {
         string _currentName = getName();
         if (m_ActionDisplay.m_Show)
         {
@@ -143,16 +173,20 @@ public class ActionController : MonoBehaviour
         {
             m_StateManager.updateObjectState(name, State.INVISIBLE);
         }
+        DISPLAY_START = true;
+    }
 
-        //------------------------------------------------------
-        //3. ACTION AUDIO PLAY
+    void startAudio()
+    {
         if (m_ActionAudioPlay.m_Play)
         {
             m_ActionAudioPlay.m_AudioSource.Play();
         }
+        AUDIO_START = true;
+    }
 
-        //------------------------------------------------------
-        //4. ACTION SEND MQTT
+    void startSendMQTT()
+    {
         if (m_ActionSendMQTT.m_SendMQTT)
         {
             MQTT_Receiver _manager = m_ActionSendMQTT.m_Manager;
@@ -162,9 +196,11 @@ public class ActionController : MonoBehaviour
             _manager.messagePublish = m_ActionSendMQTT.m_Message;
             _manager.Publish();
         }
+        MQTT_START = true;
+    }
 
-        //------------------------------------------------------
-        //5. ACTION MATERIAL UPDATE
+    void startMaterial()
+    {
         if (m_ActionMaterialDisappear.m_Disappear)
         {
             Material _newMaterial = m_ActionMaterialDisappear.m_NewMaterial;
@@ -174,5 +210,147 @@ public class ActionController : MonoBehaviour
 
             m_ActionMaterialDisappear.m_DissolveHelper.onAction();
         }
+        MATERIAL_START = true;
+    }
+
+    IEnumerator MoveCoRoutine()
+    {
+        while (!MOVE_START)
+        {
+            if (MOVE_READY)
+            {
+                startMove();
+            }
+            else
+            {
+                MOVE_READY = true;
+                if (m_ActionMove.timeOffset > 0)
+                {
+                    yield return new WaitForSeconds(m_ActionMove.timeOffset);
+                    Debug
+                        .Log($"Trigger MOVE in " +
+                        m_ActionMove.timeOffset +
+                        " seconds.");
+                }
+            }
+        }
+    }
+
+    IEnumerator DisplayCoRoutine()
+    {
+        while (!DISPLAY_START)
+        {
+            if (DISPLAY_READY)
+            {
+                startDisplay();
+            }
+            else
+            {
+                DISPLAY_READY = true;
+                if (m_ActionDisplay.timeOffset > 0)
+                {
+                    yield return new WaitForSeconds(m_ActionDisplay.timeOffset);
+                    Debug
+                        .Log($"Trigger DISPLAY in " +
+                        m_ActionDisplay.timeOffset +
+                        " seconds.");
+                }
+            }
+        }
+    }
+
+    IEnumerator PlayAudioCoRoutine()
+    {
+        while (!AUDIO_START)
+        {
+            if (AUDIO_READY)
+            {
+                startAudio();
+            }
+            else
+            {
+                AUDIO_READY = true;
+                if (m_ActionAudioPlay.timeOffset > 0)
+                {
+                    yield return new WaitForSeconds(m_ActionAudioPlay
+                                .timeOffset);
+                    Debug
+                        .Log($"Trigger AUDIO in " +
+                        m_ActionAudioPlay.timeOffset +
+                        " seconds.");
+                }
+            }
+        }
+    }
+
+    IEnumerator SendMQTTCoRoutine()
+    {
+        while (!MQTT_START)
+        {
+            if (MQTT_READY)
+            {
+                startSendMQTT();
+            }
+            else
+            {
+                MQTT_READY = true;
+                if (m_ActionSendMQTT.timeOffset > 0)
+                {
+                    yield return new WaitForSeconds(m_ActionSendMQTT
+                                .timeOffset);
+                    Debug
+                        .Log($"Trigger SEND MQTT in " +
+                        m_ActionSendMQTT.timeOffset +
+                        " seconds.");
+                }
+            }
+        }
+    }
+
+    IEnumerator MaterialCoRoutine()
+    {
+        while (!MATERIAL_START)
+        {
+            if (MATERIAL_READY)
+            {
+                startMaterial();
+            }
+            else
+            {
+                MATERIAL_READY = true;
+                if (m_ActionMaterialDisappear.timeOffset > 0)
+                {
+                    yield return new WaitForSeconds(m_ActionMaterialDisappear
+                                .timeOffset);
+                    Debug
+                        .Log($"Trigger MATERIAL DISAPPEAR in " +
+                        m_ActionMaterialDisappear.timeOffset +
+                        " seconds.");
+                }
+            }
+        }
+    }
+
+    public void OnCallback()
+    {
+        //------------------------------------------------------
+        //1. ACTION MOVE
+        StartCoroutine("MoveCoRoutine");
+
+        //------------------------------------------------------
+        //2. ACTION DISPLAY
+        StartCoroutine("DisplayCoRoutine");
+
+        //------------------------------------------------------
+        //3. ACTION AUDIO PLAY
+        StartCoroutine("PlayAudioCoRoutine");
+
+        //------------------------------------------------------
+        //4. ACTION SEND MQTT
+        StartCoroutine("SendMQTTCoRoutine");
+
+        //------------------------------------------------------
+        //5. ACTION MATERIAL UPDATE
+        StartCoroutine("MaterialCoRoutine");
     }
 }
