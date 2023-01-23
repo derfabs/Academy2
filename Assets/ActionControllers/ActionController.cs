@@ -19,10 +19,6 @@ public struct Move
     public float m_Threshold;
 
     public bool m_UseGravity;
-
-    public bool m_SetPosition;
-
-    public Vector3 m_NewPosition;
 }
 
 [System.Serializable]
@@ -128,11 +124,6 @@ public class ActionController : MonoBehaviour
             if (m_ActionMove.m_Target == null) return;
             m_ActionMove.m_Rigidbody.useGravity = m_ActionMove.m_UseGravity;
             isMoving = true;
-        }
-        if (m_ActionMove.m_SetPosition)
-        {
-            if (m_ActionMove.m_NewPosition == null) return;
-            m_ActionMove.m_Rigidbody.MovePosition(m_ActionMove.m_NewPosition);
         }
 
         //------------------------------------------------------

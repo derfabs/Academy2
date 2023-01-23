@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class GUIControls : MonoBehaviour
 {
-    public GUISkin customSkin;
-
     private float startW = 10;
 
     private float startH = 10;
@@ -16,7 +14,7 @@ public class GUIControls : MonoBehaviour
 
     public float GUIWidth = 340;
 
-    public int m_FontSize = 18;
+    public int GUIFontSize = 18;
 
     private int resolutionX = Screen.width;
 
@@ -28,7 +26,7 @@ public class GUIControls : MonoBehaviour
 
     private StateManager m_StateManager;
 
-    public float positionOffset = 2.0f;
+    private float positionOffset = 2.0f;
 
     private float posX;
 
@@ -79,8 +77,8 @@ public class GUIControls : MonoBehaviour
 
     void OnGUI()
     {
-        GUI.skin.label.fontSize = m_FontSize;
-        GUI.skin.button.fontSize = m_FontSize;
+        GUI.skin.label.fontSize = GUIFontSize;
+        GUI.skin.button.fontSize = GUIFontSize;
         int currentIdx = 0;
         int nextIdx = 0;
 
